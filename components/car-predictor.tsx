@@ -61,7 +61,7 @@ export function CarPredictor() {
         <div className="max-w-[690px] self-center">
           <div className="mb-6 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-[#789344]"><Sparkles size={14} /> Used car pricing, decoded</div>
           <h1 className="text-balance text-5xl font-semibold leading-[0.98] tracking-[-0.06em] text-[#173c31] md:text-7xl">Know what your car is <span className="text-[#9bb84a]">really worth.</span></h1>
-          <p className="mt-7 max-w-[550px] text-lg leading-8 text-[#6b786f]">A practical price estimate trained on Indian used-car listings from CarDekho and Cars24.</p>
+          <p className="mt-7 max-w-[550px] text-lg leading-8 text-[#6b786f]">A practical price estimate trained on Indian used-car listings.</p>
           <div className="mt-10 flex flex-wrap gap-3 text-xs font-semibold text-[#5f6d65]"><span className="rounded-full bg-[#e8efdf] px-4 py-2">●  12,400+ listings</span><span className="rounded-full bg-[#e8efdf] px-4 py-2">●  Updated for 2026</span><span className="rounded-full bg-[#e8efdf] px-4 py-2">●  ₹ INR</span></div>
         </div>
 
