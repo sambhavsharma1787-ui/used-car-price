@@ -88,7 +88,7 @@ export function CarPredictor() {
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#173c31] text-[#d7f26d]"><CarFront size={21} strokeWidth={2.2} /></div>
           <div><p className="text-[15px] font-bold tracking-[-0.03em]">autovalue</p><p className="text-[10px] uppercase tracking-[0.2em] text-[#738078]">india market intelligence</p></div>
         </div>
-        <div className="hidden items-center gap-8 text-sm text-[#647068] md:flex"><span className="font-semibold text-[#173c31]">Predictor</span><span>How it works</span><span>Dataset</span></div>
+        <div className="hidden items-center gap-8 text-sm text-[#647068] md:flex"><span className="font-semibold text-[#173c31]">Predictor</span></div>
         <div className="flex items-center gap-2 rounded-full border border-[#dae0d8] bg-white px-3 py-2 text-xs font-medium text-[#607068]"><span className="h-2 w-2 rounded-full bg-[#9dcc4a]" /> Model online</div>
       </header>
 
