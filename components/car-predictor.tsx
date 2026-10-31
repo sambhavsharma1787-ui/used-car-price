@@ -6,6 +6,13 @@ import { ArrowUpRight, BarChart3, CarFront, CircleHelp, Gauge, IndianRupee, Rota
 const brands = ['Maruti', 'Hyundai', 'Honda', 'Toyota', 'Tata', 'Mahindra', 'Kia', 'Volkswagen']
 const fuels = ['Petrol', 'Diesel', 'CNG', 'Electric']
 
+const featuredCars = [
+  { name: 'Maruti Swift', meta: '2019 · Petrol · 42,000 km', price: '₹6.84 Lakh', image: '/cars/maruti-swift.png' },
+  { name: 'Hyundai Creta', meta: '2020 · Diesel · 51,200 km', price: '₹12.40 Lakh', image: '/cars/hyundai-creta.png' },
+  { name: 'Honda City', meta: '2018 · Petrol · 38,600 km', price: '₹8.15 Lakh', image: '/cars/honda-city.png' },
+  { name: 'Tata Nexon', meta: '2021 · Petrol · 27,900 km', price: '₹9.35 Lakh', image: '/cars/tata-nexon.png' },
+]
+
 function formatPrice(value: number) {
   return `₹${value.toFixed(2)} Lakh`
 }
@@ -72,6 +79,13 @@ export function CarPredictor() {
       </section>
 
       <section className="mx-auto max-w-[1440px] px-6 pb-16 lg:px-12">
+        <div className="mb-10 flex items-end justify-between gap-4">
+          <div><p className="text-xs font-bold uppercase tracking-[0.18em] text-[#789344]">Cars in the dataset</p><h2 className="mt-2 text-3xl font-semibold tracking-[-0.05em] text-[#173c31]">Popular Indian used cars</h2></div>
+          <p className="hidden max-w-xs text-right text-sm leading-6 text-[#77847c] sm:block">Real examples help put your estimate in context.</p>
+        </div>
+        <div className="mb-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          {featuredCars.map(car => <article key={car.name} className="overflow-hidden rounded-2xl border border-[#e1e7de] bg-white shadow-[0_8px_30px_rgba(43,68,47,0.05)] transition hover:-translate-y-1 hover:shadow-[0_14px_34px_rgba(43,68,47,0.1)]"><img src={car.image} alt={`${car.name} used car`} className="h-36 w-full object-cover" /><div className="p-4"><div className="flex items-start justify-between gap-3"><h3 className="font-semibold text-[#244536]">{car.name}</h3><span className="rounded-full bg-[#edf3e5] px-2 py-1 text-[10px] font-bold text-[#6c8b3d]">USED</span></div><p className="mt-2 text-xs text-[#849087]">{car.meta}</p><p className="mt-4 text-lg font-semibold tracking-[-0.03em] text-[#173c31]">{car.price}</p></div></article>)}
+        </div>
         <div className="grid gap-5 lg:grid-cols-[1.25fr_0.75fr_0.75fr]">
           <div className="result-card"><div><div className="mb-4 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-[#789344]"><IndianRupee size={14} /> Estimated resale value</div><p className="text-5xl font-semibold tracking-[-0.06em] text-[#173c31]">{formatPrice(result)}</p><p className="mt-3 text-sm text-[#77847c]">Typical range <strong className="text-[#45584c]">₹{(result - 0.65).toFixed(2)} – ₹{(result + 0.65).toFixed(2)} Lakh</strong></p></div><div className="mt-6 flex items-center gap-3 border-t border-[#e6ebe3] pt-5 text-xs text-[#718078]"><span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#e7f0d9] text-[#6b913e]"><TrendingUp size={15} /></span> Your estimate is based on comparable listings in India</div></div>
           <div className="result-card"><div className="mb-6 flex items-center justify-between"><span className="text-xs font-bold uppercase tracking-[0.16em] text-[#789344]">Confidence</span><CircleHelp size={16} className="text-[#aab6ad]" /></div><p className="text-4xl font-semibold tracking-[-0.05em] text-[#173c31]">{confidence}%</p><div className="mt-5 h-2 overflow-hidden rounded-full bg-[#e7ece4]"><div className="h-full rounded-full bg-[#9fbe4a]" style={{ width: `${confidence}%` }} /></div><p className="mt-3 text-xs leading-5 text-[#77847c]">Strong match with similar vehicles in the dataset.</p></div>
