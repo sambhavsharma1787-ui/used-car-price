@@ -60,6 +60,7 @@ export function CarPredictor() {
   const [year, setYear] = useState(2019)
   const [kms, setKms] = useState(42000)
   const [result, setResult] = useState(6.84)
+  const [isEstimated, setIsEstimated] = useState(false)
   const [search, setSearch] = useState('')
   const [showPremium, setShowPremium] = useState(false)
   const [visibleCount, setVisibleCount] = useState(12)
@@ -76,6 +77,7 @@ export function CarPredictor() {
   function predict() {
     const nextEstimate = calculateEstimate(brand, fuel, year, kms)
     setResult(nextEstimate)
+    setIsEstimated(true)
   }
 
   function reset() {
@@ -84,6 +86,7 @@ export function CarPredictor() {
     setYear(2019)
     setKms(42000)
     setResult(6.84)
+    setIsEstimated(false)
   }
 
   return (
@@ -114,7 +117,7 @@ export function CarPredictor() {
             <label className="space-y-2 text-sm font-medium text-[#d9e3d5]">Registration year<div className="range-wrap"><input type="range" min="2012" max="2025" value={year} onChange={e => setYear(Number(e.target.value))} /><span>{year}</span></div></label>
             <label className="space-y-2 text-sm font-medium text-[#d9e3d5]">Kilometres driven<div className="relative"><input type="number" value={kms} onChange={e => setKms(Number(e.target.value))} className="field pr-16" min="0" /><span className="absolute right-4 top-3.5 text-xs text-[#8da197]">km</span></div></label>
           </div>
-          <div className="mt-7 flex gap-3"><button onClick={predict} className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#c7e65a] px-5 py-3.5 text-sm font-bold text-[#18352b] transition hover:bg-[#d9f47d]">Estimate price <ArrowUpRight size={17} /></button><button onClick={reset} aria-label="Reset form" className="rounded-xl border border-white/15 px-4 text-[#c2d1c4] transition hover:bg-white/10"><RotateCcw size={17} /></button></div>
+          <div className="mt-7 flex gap-3"><button type="button" onClick={predict} aria-controls="estimate-result" className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#c7e65a] px-5 py-3.5 text-sm font-bold text-[#18352b] transition hover:bg-[#d9f47d] active:scale-[0.98]">{isEstimated ? 'Price updated' : 'Estimate price'} <ArrowUpRight size={17} /></button><button onClick={reset} aria-label="Reset form" className="rounded-xl border border-white/15 px-4 text-[#c2d1c4] transition hover:bg-white/10"><RotateCcw size={17} /></button></div>
         </div>
       </section>
 
@@ -141,7 +144,7 @@ export function CarPredictor() {
           {visibleCount < filteredCatalog.length && <button onClick={() => setVisibleCount(count => count + 12)} className="mx-auto mt-6 flex rounded-xl border border-[#bfd0b8] bg-white px-5 py-2.5 text-sm font-bold text-[#315342] transition hover:border-[#789344] hover:bg-[#f8fbf6]">Load more cars <span className="ml-2 text-[#789344]">({filteredCatalog.length - visibleCount} left)</span></button>}
         </div>
         <div className="grid gap-5 lg:grid-cols-[1.25fr_0.75fr_0.75fr]">
-          <div className="result-card"><div><div className="mb-4 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-[#789344]"><IndianRupee size={14} /> Estimated resale value</div><p className="text-5xl font-semibold tracking-[-0.06em] text-[#173c31]">{formatPrice(result)}</p><p className="mt-3 text-sm text-[#77847c]">Typical range <strong className="text-[#45584c]">₹{(result - 0.65).toFixed(2)} – ₹{(result + 0.65).toFixed(2)} Lakh</strong></p></div><div className="mt-6 flex items-center gap-3 border-t border-[#e6ebe3] pt-5 text-xs text-[#718078]"><span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#e7f0d9] text-[#6b913e]"><TrendingUp size={15} /></span> Your estimate is based on comparable listings in India</div></div>
+          <div id="estimate-result" aria-live="polite" className="result-card"><div><div className="mb-4 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-[#789344]"><IndianRupee size={14} /> Estimated resale value</div><p className="text-5xl font-semibold tracking-[-0.06em] text-[#173c31]">{formatPrice(result)}</p><p className="mt-3 text-sm text-[#77847c]">Typical range <strong className="text-[#45584c]">₹{(result - 0.65).toFixed(2)} – ₹{(result + 0.65).toFixed(2)} Lakh</strong></p></div><div className="mt-6 flex items-center gap-3 border-t border-[#e6ebe3] pt-5 text-xs text-[#718078]"><span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#e7f0d9] text-[#6b913e]"><TrendingUp size={15} /></span> Your estimate is based on comparable listings in India</div></div>
           <div className="result-card"><div className="mb-6 flex items-center justify-between"><span className="text-xs font-bold uppercase tracking-[0.16em] text-[#789344]">Confidence</span><CircleHelp size={16} className="text-[#aab6ad]" /></div><p className="text-4xl font-semibold tracking-[-0.05em] text-[#173c31]">{confidence}%</p><div className="mt-5 h-2 overflow-hidden rounded-full bg-[#e7ece4]"><div className="h-full rounded-full bg-[#9fbe4a]" style={{ width: `${confidence}%` }} /></div><p className="mt-3 text-xs leading-5 text-[#77847c]">Strong match with similar vehicles in the dataset.</p></div>
           <div className="result-card"><div className="mb-6 flex items-center justify-between"><span className="text-xs font-bold uppercase tracking-[0.16em] text-[#789344]">Model signals</span><Gauge size={17} className="text-[#9fbe4a]" /></div><div className="space-y-4 text-sm"><div className="flex justify-between"><span className="text-[#77847c]">Brand demand</span><span className="font-semibold text-[#294c3d]">High</span></div><div className="flex justify-between"><span className="text-[#77847c]">Age impact</span><span className="font-semibold text-[#294c3d]">−{(Math.max(0, 2026 - year) * 0.42).toFixed(2)} L</span></div><div className="flex justify-between"><span className="text-[#77847c]">Mileage impact</span><span className="font-semibold text-[#294c3d]">−{(kms / 10000 * 0.12).toFixed(2)} L</span></div></div></div>
         </div>
