@@ -44,6 +44,16 @@ function formatPrice(value: number) {
   return `₹${value.toFixed(2)} Lakh`
 }
 
+function calculateEstimate(brand: string, fuel: string, year: number, kms: number) {
+  const brandFactor: Record<string, number> = { Maruti: 0, Hyundai: 0.38, Honda: 1.05, Toyota: 2.15, Tata: 0.32, Mahindra: 0.75, Kia: 1.6, Volkswagen: 0.92 }
+  const fuelFactor: Record<string, number> = { Petrol: 0, Diesel: 0.75, CNG: -0.15, Electric: 2.3 }
+  const safeYear = Number.isFinite(year) ? year : 2019
+  const safeKms = Number.isFinite(kms) && kms >= 0 ? kms : 0
+  const age = Math.max(0, 2026 - safeYear)
+  const calculated = 8.15 + (brandFactor[brand] ?? 0) + (fuelFactor[fuel] ?? 0) - age * 0.42 - (safeKms / 10000) * 0.12
+  return Math.max(1.25, Number(calculated.toFixed(2)))
+}
+
 export function CarPredictor() {
   const [brand, setBrand] = useState('Maruti')
   const [fuel, setFuel] = useState('Petrol')
@@ -59,18 +69,13 @@ export function CarPredictor() {
     return matchesSearch && (!showPremium || car.premium)
   }), [search, showPremium])
 
-  const estimate = useMemo(() => {
-    const brandFactor: Record<string, number> = { Maruti: 0, Hyundai: 0.38, Honda: 1.05, Toyota: 2.15, Tata: 0.32, Mahindra: 0.75, Kia: 1.6, Volkswagen: 0.92 }
-    const fuelFactor: Record<string, number> = { Petrol: 0, Diesel: 0.75, CNG: -0.15, Electric: 2.3 }
-    const age = Math.max(0, 2026 - year)
-    const calculated = 8.15 + (brandFactor[brand] ?? 0) + (fuelFactor[fuel] ?? 0) - age * 0.42 - (kms / 10000) * 0.12
-    return Math.max(1.25, Number(calculated.toFixed(2)))
-  }, [brand, fuel, year, kms])
+  const estimate = useMemo(() => calculateEstimate(brand, fuel, year, kms), [brand, fuel, year, kms])
 
   const confidence = Math.min(94, Math.max(72, Math.round(91 - Math.abs(estimate - result) * 1.5)))
 
   function predict() {
-    setResult(estimate)
+    const nextEstimate = calculateEstimate(brand, fuel, year, kms)
+    setResult(nextEstimate)
   }
 
   function reset() {
