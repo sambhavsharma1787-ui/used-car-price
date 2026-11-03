@@ -6,6 +6,12 @@ import { ArrowUpRight, BarChart3, CarFront, CircleHelp, Crown, Gauge, IndianRupe
 const brands = ['Maruti', 'Hyundai', 'Honda', 'Toyota', 'Tata', 'Mahindra', 'Kia', 'Volkswagen']
 const fuels = ['Petrol', 'Diesel', 'CNG', 'Electric']
 
+const presets = [
+  { label: 'City hatchback', brand: 'Maruti', fuel: 'Petrol', year: 2020, kms: 32000 },
+  { label: 'Family SUV', brand: 'Hyundai', fuel: 'Diesel', year: 2021, kms: 28000 },
+  { label: 'Premium EV', brand: 'Kia', fuel: 'Electric', year: 2023, kms: 16000 },
+]
+
 const featuredCars = [
   { name: 'Maruti Swift', meta: '2019 · Petrol · 42,000 km', price: '₹6.84 Lakh', image: '/cars/maruti-swift.png' },
   { name: 'Hyundai Creta', meta: '2020 · Diesel · 51,200 km', price: '₹12.40 Lakh', image: '/cars/hyundai-creta.png' },
@@ -89,6 +95,15 @@ export function CarPredictor() {
     setIsEstimated(false)
   }
 
+  function applyPreset(preset: typeof presets[number]) {
+    setBrand(preset.brand)
+    setFuel(preset.fuel)
+    setYear(preset.year)
+    setKms(preset.kms)
+    setResult(calculateEstimate(preset.brand, preset.fuel, preset.year, preset.kms))
+    setIsEstimated(true)
+  }
+
   return (
     <main className="min-h-screen bg-[#f7f8f5] text-[#17221e]">
       <header className="mx-auto flex max-w-[1440px] items-center justify-between px-6 py-5 lg:px-12">
@@ -104,7 +119,7 @@ export function CarPredictor() {
         <div className="max-w-[690px] self-center">
           <div className="mb-6 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-[#789344]"><Sparkles size={14} /> Used car pricing, decoded</div>
           <h1 className="text-balance text-5xl font-semibold leading-[0.98] tracking-[-0.06em] text-[#173c31] md:text-7xl">Know what your car is <span className="text-[#9bb84a]">really worth.</span></h1>
-          <p className="mt-7 max-w-[550px] text-lg leading-8 text-[#6b786f]">A practical price estimate trained on Indian used-car listings.</p>
+          <p className="mt-7 max-w-[550px] text-lg leading-8 text-[#6b786f]">A transparent baseline model that estimates Indian resale prices from brand, fuel, age, and mileage.</p>
           <div className="mt-10 flex flex-wrap gap-3 text-xs font-semibold text-[#5f6d65]"><span className="rounded-full bg-[#e8efdf] px-4 py-2">●  12,400+ listings</span><span className="rounded-full bg-[#e8efdf] px-4 py-2">●  Updated for 2026</span><span className="rounded-full bg-[#e8efdf] px-4 py-2">●  ₹ INR</span></div>
         </div>
 
@@ -117,7 +132,8 @@ export function CarPredictor() {
             <label className="space-y-2 text-sm font-medium text-[#d9e3d5]">Registration year<div className="range-wrap"><input type="range" min="2012" max="2025" value={year} onChange={e => setYear(Number(e.target.value))} /><span>{year}</span></div></label>
             <label className="space-y-2 text-sm font-medium text-[#d9e3d5]">Kilometres driven<div className="relative"><input type="number" value={kms} onChange={e => setKms(Number(e.target.value))} className="field pr-16" min="0" /><span className="absolute right-4 top-3.5 text-xs text-[#8da197]">km</span></div></label>
           </div>
-          <div className="mt-7 flex gap-3"><button type="button" onClick={predict} aria-controls="estimate-result" className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#c7e65a] px-5 py-3.5 text-sm font-bold text-[#18352b] transition hover:bg-[#d9f47d] active:scale-[0.98]">{isEstimated ? 'Price updated' : 'Estimate price'} <ArrowUpRight size={17} /></button><button onClick={reset} aria-label="Reset form" className="rounded-xl border border-white/15 px-4 text-[#c2d1c4] transition hover:bg-white/10"><RotateCcw size={17} /></button></div>
+          <div className="mt-7 flex gap-3"><button type="button" onClick={predict} aria-controls="estimate-result" className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#c7e65a] px-5 py-3.5 text-sm font-bold text-[#18352b] transition hover:bg-[#d9f47d] active:scale-[0.98]">{isEstimated ? 'Price updated' : 'Estimate price'} <ArrowUpRight size={17} /></button><button type="button" onClick={reset} aria-label="Reset form" className="rounded-xl border border-white/15 px-4 text-[#c2d1c4] transition hover:bg-white/10"><RotateCcw size={17} /></button></div>
+          <div className="mt-5 rounded-2xl border border-white/10 bg-white/[0.06] p-4"><div className="flex items-center justify-between"><span className="text-xs font-semibold text-[#adc0b0]">Live preview</span><span className="text-lg font-bold text-[#d7f26d]">{formatPrice(estimate)}</span></div><div className="mt-3 flex flex-wrap gap-2">{presets.map(preset => <button key={preset.label} type="button" onClick={() => applyPreset(preset)} className="rounded-full border border-white/10 px-3 py-1.5 text-[11px] font-medium text-[#c5d4c7] transition hover:border-[#c7e65a] hover:text-[#d7f26d]">{preset.label}</button>)}</div></div>
         </div>
       </section>
 
